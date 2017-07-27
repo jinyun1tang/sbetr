@@ -22,6 +22,9 @@ include_directories(${CMAKE_BINARY_DIR}/src/betr/betr_rxns)
 include(add_betr_library)
 add_betr_library(betr_driver_shared ${BETR_DRIVER_SHARED_SOURCES})
 
+if (SBETR)
+  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -DSBETR")
+endif()
 set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -w")
 
 set(BETR_LIBRARIES betr_driver_shared;${BETR_LIBRARIES} PARENT_SCOPE)

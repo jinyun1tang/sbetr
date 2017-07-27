@@ -14,6 +14,7 @@ FC         = not-set
 travis     = not-set
 BGC        = not-set
 UGM        = not-set
+SBETR      = not-set
 # This proxies everything to the builddir cmake.
 
 cputype = $(shell uname -m | sed "s/\\ /_/g")
@@ -33,6 +34,11 @@ ifeq ($(UGM), not-set)
 	CONFIG_FLAGS += -DUGM=0
 else
 	CONFIG_FLAGS += -DUGM=1
+endif
+
+ifeq ($(SBETR), not-set)
+else
+	CONFIG_FLAGS += -DSBETR=1
 endif
 # Travis-CI build
 ifeq ($(travis), not-set)
