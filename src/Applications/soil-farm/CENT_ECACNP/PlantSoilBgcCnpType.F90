@@ -1,9 +1,10 @@
 module PlantSoilBgcCnpType
 
-
+#include "bshr_assert.h"
   use PlantSoilBGCMod , only : plant_soilbgc_type
   use bshr_kind_mod           , only : r8 => shr_kind_r8
   use bshr_infnan_mod         , only : nan => shr_infnan_nan, assignment(=)
+  use bshr_log_mod            , only : errMsg => shr_log_errMsg
   implicit none
 
   private
@@ -138,7 +139,7 @@ module PlantSoilBgcCnpType
   type(betr_patch_type)     , intent(in) :: pft
   integer                   , intent(in) :: numf
   integer                   , intent(in) :: filter(:)
-  real(r8)                  , intent(in) :: dz(bounds%begc:bounds%endc,1:ubj)
+  real(r8)                  , intent(in) :: dz(bounds%begc: ,1: )
   real(r8)                  , intent(in) :: dtime
   type(BeTRtracer_type )    , intent(in) :: betrtracer_vars
   type(tracerflux_type)     , intent(in) :: tracerflux_vars
@@ -149,7 +150,8 @@ module PlantSoilBgcCnpType
   integer :: p, c, fc
 
   call betr_status%reset()
-
+  SHR_ASSERT_ALL((ubound(dz)==(/bounds%endc,ubj/)), errMsg(filename,__LINE__), betr_status)
+  if(betr_status%check_status())return
   associate(                                                                &
     tracer_flx_vtrans_patch  => tracerflux_vars%tracer_flx_vtrans_patch   , &
     id_trc_no3x  => betrtracer_vars%id_trc_no3x, &
